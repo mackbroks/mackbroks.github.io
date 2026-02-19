@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chase James</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page">
+    <nav class="top-links">
+      <a href="mailto:cajames1010@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/chase-james1?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3B7xJcqylhQ8uNiEZlwVEPqg%3D%3D" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
+    <!-- Top 20%: Summary / message -->
+    <header class="summary-section">
+      <div class="summary-box">
+        <h1>Chase James</h1>
+        <p>Hello! Thank you for taking some time to visit my portfolio website, I'm excited to share previews of some of my work with you. I hope you enjoy viewing!</p>
+      </div>
+    </header>
+
+    <!-- Middle 60%: Projects lane – each project-block is one grouped unit (media + text). Sorted by data-date ascending. -->
+    <main class="content-section">
+      <div class="projects" id="projects">
+
+        <!-- ========== PROJECT BLOCK 1 ========== -->
+        <article class="project-block" data-date="2026-02-18">
+          <div class="media-box">
+            <video src="videos/s2cshortdemo.mp4" controls playsinline></video>
+          </div>
+          <div class="text-box">
+            <h2 class="text-box-title">Syllabus2Calendar</h2>
+            <p>Web app that turns pasted academic syllabi into calendars files using an LLM, with reminders and reports, instead of manual multi-event creation and academic organization</p>
+            <h3 class="text-box-subtitle">Technologies Used</h3>
+            <ul class="text-box-list">
+              <li><strong>Web:</strong> Vanilla JavaScript, HTML, and CSS: semester and class setup, syllabus paste/upload, API key and reminder/report settings</li>
+              <li><strong>Proxy:</strong> Node.js: proxy to Flask API, static frontend hosting, and ICS file download</li>
+              <li><strong>Backend:</strong> Python: Flask REST API, OpenAI (4o-mini) for parsing, icalendar for ICS generation. No database, processor state is per request; bulk ICS is written and returned</li>
+            </ul>
+            <h3 class="text-box-subtitle">Impact and Results</h3>
+            <ul class="text-box-list">
+              <li><strong>Scope:</strong> Covers flow from pasted syllabi to ICS file: optional clarification, event extraction and date resolution, then calendar generation with timeline countdowns, configurable reminders, and pre-generated report content</li>
+              <li><strong>Intelligent parsing:</strong> Two-step analysze-then-process flow with optional clarification for ambiguity; multi-format date handling and class-schedule integration (e.g. MWF, TTh); event classification (HW, EXA, PRO) for downstream timeline logic</li>
+              <li><strong>Calendar behavior:</strong> Timeline countdown windows (e.g. 12-day exam countdown, project cycles, sequential homework windows); configurable per-day reminder windows and reminder count; pre-generated email report content with configurable report days and homework lookahead; one consolidated calendar from multiple syllabi</li>
+              <li><strong>Output and footprint:</strong> Standard ICS for use in Google Calendar, Apple Calendar, Outlook, and other clients; no database or auth API key and config per session</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- ========== PROJECT BLOCK 2 ========== -->
+        <article class="project-block" data-date="2026-02-18">
+          <div class="media-box">
+            <img src="images/demo/reader image.png" alt="Reader view">
+          </div>
+          <div class="text-box">
+            <h2 class="text-box-title">Reader Suite</h2>
+            <p>Desktop app for capturing and generating ebooks, plus a Progressive Web App (PWA) for reading offline, with optional backend for sync across devices</p>
+            <h3 class="text-box-subtitle">Technologies Used</h3>
+            <ul class="text-box-list">
+              <li><strong>Desktop:</strong> Python: GUI, automation, file generation, and encrypted custom format</li>
+              <li><strong>Web:</strong> Vanilla JavaScript: PWA with offline storage (IndexedDB), Service Worker, and file handling</li>
+              <li><strong>Backend:</strong> REST API (FastAPI), PostgreSQL, migrations, auth, and file storage</li>
+            </ul>
+            <h3 class="text-box-subtitle">Impact and Results</h3>
+            <ul class="text-box-list">
+              <li><strong>Scope:</strong> Covers the full flow from capture to publish to read, plus  cloud sync</li>
+              <li><strong>User-focused design:</strong> Offline-first reading, no account required for local use, and data stays on device unless sync is used</li>
+              <li><strong>Technical depth:</strong> Custom encrypted ebook format with key derivation and lazy decryption in the browser for security and performance improvements</li>
+              <li><strong>Portable and deployable:</strong> Desktop app runs on Windows, macOS, and Linux; PWA works in major browsers and is installable; backend is standard REST and PostgreSQL.</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </main>
+
+    <!-- Bottom 20%: Footer / spacer -->
+    <footer class="footer-section">
+      <div class="footer-box">
+        <p id="footer-year"></p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Image modal: click overlay or close button to exit -->
+  <div id="image-modal" class="image-modal" aria-hidden="true">
+    <button type="button" class="image-modal-close" aria-label="Close">×</button>
+    <div class="image-modal-backdrop"></div>
+    <div class="image-modal-content">
+      <img src="" alt="" class="image-modal-img">
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

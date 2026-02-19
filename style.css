@@ -1,0 +1,295 @@
+/* Reset and base */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #fff;
+}
+
+/* Full-page background: use your GIF or PNG here */
+.page {
+  min-height: 100vh;
+  background: url("images/background/rainy_forest_rain.gif") center center / cover no-repeat fixed;
+  background-color: #1a2e1a; /* fallback if image fails */
+}
+
+/* Top right: Email & LinkedIn links */
+.top-links {
+  position: fixed;
+  top: clamp(1rem, 3vw, 1.5rem);
+  right: clamp(1rem, 3vw, 1.5rem);
+  z-index: 10;
+  display: flex;
+  gap: 0.75rem;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+.top-links a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.top-links a:hover {
+  text-decoration: underline;
+}
+
+/* Semi-transparent white box (reusable) */
+.glass-box {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* ----- 20% Top: Summary section ----- */
+.summary-section {
+  min-height: 20vh;
+  padding: clamp(1rem, 4vw, 2rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-box {
+  width: 100%;
+  max-width: 900px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.summary-box h1 {
+  margin: 0 0 0.5em;
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 600;
+  color: #fff;
+}
+
+.summary-box p {
+  margin: 0;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.5;
+}
+
+/* ----- 60% Middle: Projects / demos ----- */
+.content-section {
+  min-height: 60vh;
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.projects {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+/* align-items: start so text fills downward and media/buttons don't stretch the other column */
+.project-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .project-block {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* One project block = one grouped unit (media left, text right). min-width: 0 keeps grid from overflowing. */
+.media-box,
+.text-box {
+  min-width: 0;
+  min-height: 200px;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.text-box {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-wrap: break-word;
+  overflow-x: hidden; /* keep text from spilling out of the box */
+}
+
+.media-box video {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  max-height: 360px;
+  object-fit: contain;
+}
+
+.media-box img {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  max-height: 360px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.media-placeholder {
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.text-box-title {
+  margin: 0 0 0.5em;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.text-box p {
+  margin: 0;
+  min-width: 0; /* allow paragraph to shrink so it can wrap inside the flex/grid cell */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.text-box-subtitle {
+  margin: 1em 0 0.35em;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.text-box-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  min-width: 0;
+}
+
+.text-box-list li {
+  margin-bottom: 0.4em;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: clamp(0.85rem, 1.6vw, 0.95rem);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* ----- 20% Bottom: Footer ----- */
+.footer-section {
+  min-height: 20vh;
+  padding: clamp(1rem, 4vw, 2rem);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.footer-box {
+  max-width: 900px;
+  text-align: left;
+}
+
+.footer-box p {
+  margin: 0;
+  font-size: clamp(1.02rem, 1.8vw, 1.2rem);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ----- Image modal (fullscreen-style view, easy exit) ----- */
+.image-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.2s, opacity 0.2s;
+}
+
+.image-modal.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.image-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+}
+
+.image-modal-content {
+  position: relative;
+  z-index: 1;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.image-modal-content .image-modal-img {
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  pointer-events: auto;
+  border-radius: 8px;
+}
+
+.image-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.image-modal-close:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
