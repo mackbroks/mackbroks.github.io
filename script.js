@@ -14,11 +14,11 @@
   var mouse = { x: -9999, y: -9999 };
 
   // Tunables: dense, controlled motion
-  var spacing = 18;   // more dots
+  var spacing = 13;   // ~2x dots vs 18px spacing
   var radius = 42;    // smaller influence area
   var strength = 7;   // less push
   var ease = 0.10;    // smooth recovery
-  var baseDotSize = 1.15;
+  var baseDotSize = 1.05;
 
   var dpr = 1;
   var cssW = 0;
