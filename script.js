@@ -30,6 +30,41 @@
   /** Slow hue drift (rad/s) so the rainbow “moves” over time */
   var hueDrift = 0.04;
 
+  /** ~30 fps target: stay under this for steady-state frames (measured in rAF). */
+  var ADAPTIVE_FRAME_BUDGET_MS = 33;
+  /** Allow quality to creep back up only when comfortably below budget. */
+  var ADAPTIVE_RELAX_MS = 24;
+  var ADAPTIVE_EMA_ALPHA = 0.14;
+  var ADAPTIVE_COOLDOWN_MS = 400;
+  var ADAPTIVE_WARMUP_FRAMES = 15;
+  var ADAPTIVE_BAD_FRAMES_TO_DOWNGRADE = 2;
+  var ADAPTIVE_GOOD_FRAMES_TO_UPGRADE = 48;
+
+  /**
+   * Each tier: [angleStepDeg, spacingMult, dprCap].
+   * Degrade left→right when over budget; upgrade when sustained headroom.
+   */
+  var ADAPTIVE_TIERS = [
+    [1, 1, 2],
+    [2, 1, 2],
+    [2, 1.25, 2],
+    [3, 1.25, 2],
+    [3, 1.5, 2],
+    [4, 1.5, 2],
+    [6, 1.5, 2],
+    [6, 2, 2],
+    [6, 2, 1]
+  ];
+  var ADAPTIVE_TIER_MAX = ADAPTIVE_TIERS.length - 1;
+
+  var adaptiveTier = 0;
+  var adaptivePendingTier = -1;
+  var adaptiveFrameTimeEma = 0;
+  var adaptiveFrameCount = 0;
+  var adaptiveBadStreak = 0;
+  var adaptiveGoodStreak = 0;
+  var adaptiveLastTierChange = 0;
+
   var dpr = 1;
   var cssW = 0;
   var cssH = 0;
@@ -39,6 +74,73 @@
 
   function clamp(n, min, max) {
     return Math.max(min, Math.min(max, n));
+  }
+
+  function getAdaptiveAngleStep() {
+    return ADAPTIVE_TIERS[adaptiveTier][0];
+  }
+
+  function getAdaptiveSpacingMult() {
+    return ADAPTIVE_TIERS[adaptiveTier][1];
+  }
+
+  function getAdaptiveDprCap() {
+    return ADAPTIVE_TIERS[adaptiveTier][2];
+  }
+
+  function applyPendingAdaptiveTier() {
+    if (adaptivePendingTier < 0) return;
+    if (adaptivePendingTier === adaptiveTier) {
+      adaptivePendingTier = -1;
+      return;
+    }
+    adaptiveTier = clamp(adaptivePendingTier, 0, ADAPTIVE_TIER_MAX);
+    adaptivePendingTier = -1;
+    adaptiveLastTierChange = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    adaptiveFrameTimeEma = 0;
+    adaptiveBadStreak = 0;
+    adaptiveGoodStreak = 0;
+    setCanvasSize();
+    buildDots(cssW, cssH);
+  }
+
+  function considerAdaptiveTier(elapsedMs) {
+    if (prefersReducedMotion) return;
+    adaptiveFrameCount++;
+    if (adaptiveFrameTimeEma <= 0) {
+      adaptiveFrameTimeEma = elapsedMs;
+    } else {
+      adaptiveFrameTimeEma += ADAPTIVE_EMA_ALPHA * (elapsedMs - adaptiveFrameTimeEma);
+    }
+    if (adaptiveFrameCount <= ADAPTIVE_WARMUP_FRAMES) return;
+
+    var now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    if (
+      adaptiveLastTierChange > 0 &&
+      now - adaptiveLastTierChange < ADAPTIVE_COOLDOWN_MS
+    ) {
+      return;
+    }
+    if (adaptivePendingTier >= 0) return;
+
+    if (adaptiveFrameTimeEma > ADAPTIVE_FRAME_BUDGET_MS) {
+      adaptiveBadStreak++;
+      adaptiveGoodStreak = 0;
+      if (adaptiveBadStreak >= ADAPTIVE_BAD_FRAMES_TO_DOWNGRADE && adaptiveTier < ADAPTIVE_TIER_MAX) {
+        adaptivePendingTier = adaptiveTier + 1;
+        adaptiveBadStreak = 0;
+      }
+    } else if (adaptiveFrameTimeEma < ADAPTIVE_RELAX_MS) {
+      adaptiveGoodStreak++;
+      adaptiveBadStreak = 0;
+      if (adaptiveGoodStreak >= ADAPTIVE_GOOD_FRAMES_TO_UPGRADE && adaptiveTier > 0) {
+        adaptivePendingTier = adaptiveTier - 1;
+        adaptiveGoodStreak = 0;
+      }
+    } else {
+      adaptiveBadStreak = 0;
+      adaptiveGoodStreak = Math.max(0, adaptiveGoodStreak - 1);
+    }
   }
 
   /** Stable rainbow per grid cell (plus optional time drift in draw) */
@@ -56,7 +158,7 @@
     cssW = Math.max(1, Math.floor(rect.width));
     cssH = Math.max(1, Math.floor(rect.height));
 
-    dpr = clamp(window.devicePixelRatio || 1, 1, 2);
+    dpr = clamp(window.devicePixelRatio || 1, 1, getAdaptiveDprCap());
     canvas.width = Math.floor(cssW * dpr);
     canvas.height = Math.floor(cssH * dpr);
 
@@ -65,17 +167,19 @@
   }
 
   /**
-   * Polar grid from viewport center: angular neighbors 1° apart on each ring; radial
-   * step = spacing. Points outside the rect are skipped (corners).
+   * Polar grid from viewport center: angular step and radial step scale with adaptive tier.
+   * Points outside the rect are skipped (corners).
    */
   function buildDots(width, height) {
     dots.length = 0;
     if (!width || !height) return;
 
+    var angleStepDeg = getAdaptiveAngleStep();
+    var dr = spacing * getAdaptiveSpacingMult();
+
     var cx = width * 0.5;
     var cy = height * 0.5;
-    var maxR = Math.hypot(Math.max(cx, width - cx), Math.max(cy, height - cy)) + spacing;
-    var dr = spacing;
+    var maxR = Math.hypot(Math.max(cx, width - cx), Math.max(cy, height - cy)) + dr;
     var jitter = 0.55;
     var degToRad = Math.PI / 180;
 
@@ -95,7 +199,7 @@
     }
 
     for (var r = dr; r <= maxR; r += dr) {
-      for (var deg = 0; deg < 360; deg += 1) {
+      for (var deg = 0; deg < 360; deg += angleStepDeg) {
         var rad = deg * degToRad;
         var bx = cx + r * Math.cos(rad);
         var by = cy + r * Math.sin(rad);
@@ -144,11 +248,15 @@
       return;
     }
 
+    applyPendingAdaptiveTier();
+
     var now = typeof performance !== 'undefined' ? performance.now() : Date.now();
     var dt = lastFrame ? (now - lastFrame) * 0.001 : 0;
     if (dt > 0.12) dt = 0.12;
     lastFrame = now;
     hueTime += dt * hueDrift * 360;
+
+    var frameStart = typeof performance !== 'undefined' ? performance.now() : Date.now();
 
     ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, cssW, cssH);
@@ -203,6 +311,10 @@
       ctx.arc(dot.x, dot.y, rDot, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    var elapsedFrame =
+      (typeof performance !== 'undefined' ? performance.now() : Date.now()) - frameStart;
+    considerAdaptiveTier(elapsedFrame);
 
     rafId = window.requestAnimationFrame(animateDotField);
   }
