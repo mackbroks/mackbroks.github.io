@@ -13,7 +13,8 @@
   var mouse = { x: -9999, y: -9999 };
 
   var spacing = 5;
-  var radius = 42; 
+  // Larger influence region (note: higher radius means more dots affected)
+  var radius = 70;
   var strength = 7;
   var ease = 0.10;
   var baseDotSize = 0.5;
@@ -84,29 +85,43 @@
 
     ctx.clearRect(0, 0, cssW, cssH);
 
+    var radiusSq = radius * radius;
+    var invRadius = 1 / radius;
+
     for (var i = 0; i < dots.length; i++) {
       var dot = dots[i];
 
       var dx = dot.baseX - mouse.x;
       var dy = dot.baseY - mouse.y;
-      var dist = Math.hypot(dx, dy);
+      var distSq = dx * dx + dy * dy;
 
       var targetX = dot.baseX;
       var targetY = dot.baseY;
 
-      var inside = dist < radius;
+      var inside = distSq < radiusSq;
+      var dist = 0;
       if (inside) {
-        var force = (1 - dist / radius) * strength;
-        var angle = Math.atan2(dy, dx);
-        targetX += Math.cos(angle) * force;
-        targetY += Math.sin(angle) * force;
+        dist = Math.sqrt(distSq);
+        var nx = dx / (dist || 1);
+        var ny = dy / (dist || 1);
+        var force = (1 - dist * invRadius) * strength;
+        targetX += nx * force;
+        targetY += ny * force;
       }
 
       dot.x += (targetX - dot.x) * ease;
       dot.y += (targetY - dot.y) * ease;
 
-      var alpha = inside ? (0.35 + (1 - dist / radius) * 0.55) : 0.30;
-      ctx.fillStyle = 'rgba(210, 230, 255, ' + alpha.toFixed(3) + ')';
+      // Reduce per-dot string churn by using a few alpha buckets.
+      var alpha;
+      if (!inside) {
+        alpha = 0.30;
+      } else {
+        var t = 1 - dist * invRadius; // 0..1
+        var bucket = Math.max(0, Math.min(5, (t * 6) | 0)); // 0..5
+        alpha = 0.30 + bucket * 0.11; // 0.30..0.85
+      }
+      ctx.fillStyle = 'rgba(210, 230, 255, ' + alpha + ')';
 
       ctx.beginPath();
       ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
