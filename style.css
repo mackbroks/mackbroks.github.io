@@ -8,11 +8,32 @@ body {
   color: #fff;
 }
 
-/* Full-page background: use your GIF or PNG here */
+/* Full-page background */
 .page {
   min-height: 100vh;
-  background: url("images/background/rainy_forest_rain.gif") center center / cover no-repeat fixed;
-  background-color: #1a2e1a; /* fallback if image fails */
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #163d7a 0%, #0b1f3f 40%, #050b16 100%);
+  background-color: #050b16; /* fallback if gradient fails */
+}
+
+/* Canvas dot field background */
+.dot-field {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Ensure content renders above background canvas */
+.top-links,
+.summary-section,
+.content-section,
+.footer-section {
+  position: relative;
+  z-index: 1;
 }
 
 /* Top right: Email & LinkedIn links */
