@@ -64,24 +64,37 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
+  /**
+   * Hexagonal close packing + tiny jitter: a square grid lines up with the axes and
+   * reads as four “spokes” (90°); hex + jitter gives even coverage in all directions.
+   */
   function buildDots(width, height) {
     dots.length = 0;
     if (!width || !height) return;
 
+    var dx = spacing;
+    var dy = spacing * Math.sqrt(3) / 2;
     var startX = spacing / 2;
     var startY = spacing / 2;
-
-    for (var y = startY; y < height; y += spacing) {
-      for (var x = startX; x < width; x += spacing) {
+    var jitter = 0.55;
+    var row = 0;
+    for (var y = startY; y < height; y += dy) {
+      var xOff = (row % 2) * (dx / 2);
+      for (var x = startX + xOff; x < width; x += dx) {
+        var jx = (Math.random() - 0.5) * 2 * jitter;
+        var jy = (Math.random() - 0.5) * 2 * jitter;
+        var bx = x + jx;
+        var by = y + jy;
         dots.push({
-          baseX: x,
-          baseY: y,
-          x: x,
-          y: y,
+          baseX: bx,
+          baseY: by,
+          x: bx,
+          y: by,
           size: baseDotSize,
-          hue: hueFromPosition(x, y, width, height)
+          hue: hueFromPosition(bx, by, width, height)
         });
       }
+      row++;
     }
   }
 
