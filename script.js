@@ -1,7 +1,6 @@
 (function () {
   'use strict';
 
-  // ---- Dot field background (subtle repulsion) ----
   var canvas = document.getElementById('dot-field');
   var ctx = canvas && canvas.getContext ? canvas.getContext('2d', { alpha: true }) : null;
 
@@ -13,11 +12,10 @@
   var dots = [];
   var mouse = { x: -9999, y: -9999 };
 
-  // Tunables: dense, controlled motion
-  var spacing = 5;    // 4x dots vs 18px spacing (area density)
-  var radius = 42;    // smaller influence area
-  var strength = 7;   // less push
-  var ease = 0.10;    // smooth recovery
+  var spacing = 5;
+  var radius = 42; 
+  var strength = 7;
+  var ease = 0.10;
   var baseDotSize = 0.5;
 
   var dpr = 1;
@@ -40,7 +38,7 @@
     canvas.width = Math.floor(cssW * dpr);
     canvas.height = Math.floor(cssH * dpr);
 
-    // Draw in CSS pixel coordinates
+
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
@@ -48,7 +46,6 @@
     dots.length = 0;
     if (!width || !height) return;
 
-    // Offset so dots aren't clipped hard at edges
     var startX = spacing / 2;
     var startY = spacing / 2;
 
@@ -90,7 +87,6 @@
     for (var i = 0; i < dots.length; i++) {
       var dot = dots[i];
 
-      // Distance from cursor to base position (stable)
       var dx = dot.baseX - mouse.x;
       var dy = dot.baseY - mouse.y;
       var dist = Math.hypot(dx, dy);
@@ -109,7 +105,6 @@
       dot.x += (targetX - dot.x) * ease;
       dot.y += (targetY - dot.y) * ease;
 
-      // Slight color/alpha shift near cursor (premium touch)
       var alpha = inside ? (0.35 + (1 - dist / radius) * 0.55) : 0.30;
       ctx.fillStyle = 'rgba(210, 230, 255, ' + alpha.toFixed(3) + ')';
 
@@ -124,18 +119,16 @@
   function initDotField() {
     if (!canvas || !ctx) return;
 
-    // Keep it unobtrusive behind everything.
-    canvas.setAttribute('aria-hidden', 'true');
+      canvas.setAttribute('aria-hidden', 'true');
 
     setCanvasSize();
     buildDots(cssW, cssH);
 
-    // Pointer tracking (covers mouse, pen, trackpads)
+  
     window.addEventListener('pointermove', onPointerMove, { passive: true });
     window.addEventListener('pointerleave', onPointerLeave, { passive: true });
     window.addEventListener('blur', onPointerLeave, { passive: true });
 
-    // Resize handling
     var resizeTimer = 0;
     window.addEventListener('resize', function () {
       window.clearTimeout(resizeTimer);
@@ -151,7 +144,6 @@
 
   initDotField();
 
-  // Sort project blocks by upload recency: ascending = oldest first (by data-date YYYY-MM-DD)
   var container = document.getElementById('projects');
   if (!container) return;
 
@@ -166,11 +158,10 @@
     container.appendChild(block);
   });
 
-  // Footer: current year
   var yearEl = document.getElementById('footer-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // Image modal: click .media-box img to open, click overlay or close button to exit
+
   var modal = document.getElementById('image-modal');
   var modalImg = modal && modal.querySelector('.image-modal-img');
   var modalBackdrop = modal && modal.querySelector('.image-modal-backdrop');
