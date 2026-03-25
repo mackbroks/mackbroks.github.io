@@ -65,37 +65,46 @@
   }
 
   /**
-   * Hexagonal close packing + tiny jitter: a square grid lines up with the axes and
-   * reads as four “spokes” (90°); hex + jitter gives even coverage in all directions.
+   * Polar grid from viewport center: angular neighbors 1° apart on each ring; radial
+   * step = spacing. Points outside the rect are skipped (corners).
    */
   function buildDots(width, height) {
     dots.length = 0;
     if (!width || !height) return;
 
-    var dx = spacing;
-    var dy = spacing * Math.sqrt(3) / 2;
-    var startX = spacing / 2;
-    var startY = spacing / 2;
+    var cx = width * 0.5;
+    var cy = height * 0.5;
+    var maxR = Math.hypot(Math.max(cx, width - cx), Math.max(cy, height - cy)) + spacing;
+    var dr = spacing;
     var jitter = 0.55;
-    var row = 0;
-    for (var y = startY; y < height; y += dy) {
-      var xOff = (row % 2) * (dx / 2);
-      for (var x = startX + xOff; x < width; x += dx) {
-        var jx = (Math.random() - 0.5) * 2 * jitter;
-        var jy = (Math.random() - 0.5) * 2 * jitter;
-        var bx = x + jx;
-        var by = y + jy;
-        dots.push({
-          baseX: bx,
-          baseY: by,
-          x: bx,
-          y: by,
-          size: baseDotSize,
-          hue: hueFromPosition(bx, by, width, height)
-        });
-      }
-      row++;
+    var degToRad = Math.PI / 180;
+
+    function pushDot(bx, by) {
+      var jx = (Math.random() - 0.5) * 2 * jitter;
+      var jy = (Math.random() - 0.5) * 2 * jitter;
+      bx += jx;
+      by += jy;
+      dots.push({
+        baseX: bx,
+        baseY: by,
+        x: bx,
+        y: by,
+        size: baseDotSize,
+        hue: hueFromPosition(bx, by, width, height)
+      });
     }
+
+    for (var r = dr; r <= maxR; r += dr) {
+      for (var deg = 0; deg < 360; deg += 1) {
+        var rad = deg * degToRad;
+        var bx = cx + r * Math.cos(rad);
+        var by = cy + r * Math.sin(rad);
+        if (bx < 0 || bx >= width || by < 0 || by >= height) continue;
+        pushDot(bx, by);
+      }
+    }
+
+    pushDot(cx, cy);
   }
 
   function onPointerMove(e) {
