@@ -12,15 +12,21 @@
   var dots = [];
   var mouse = { x: -9999, y: -9999 };
 
-  var spacing = 10;
+  var spacing = 9;
   /** Larger = bigger “ring” of dots and more open space near the cursor */
-  var influenceRadius = 200;
-  /** How far dots slide outward from the pointer (radial push); below Goering-level */
-  var strength = 11;
+  var influenceRadius = 210;
+  /** Radial push: outward from cursor (stronger = clearer empty disk) */
+  var strength = 17;
+  /**
+   * Clockwise tangential offset (screen coords, y-down). Perpendicular to radial is (-ny, nx).
+   * Weight peaks at mid-radius so the swirl hugs the “ring”, not the center.
+   */
+  var spinStrength = 7;
   /** How quickly dots reach their pushed position (higher = snappier hole) */
-  var ease = 0.16;
-  var baseDotSize = 1.1;
-  var maxDotSize = 2.6;
+  var ease = 0.18;
+  /** Smaller dots = sharper circular edge; max still pops near cursor */
+  var baseDotSize = 0.75;
+  var maxDotSize = 2.1;
   /** Slow hue drift (rad/s) so the rainbow “moves” over time */
   var hueDrift = 0.04;
 
@@ -144,9 +150,15 @@
         dist = Math.sqrt(distSq);
         var nx = dx / (dist || 1);
         var ny = dy / (dist || 1);
-        var force = (1 - dist * invRadius) * strength;
-        targetX += nx * force;
-        targetY += ny * force;
+        var t = 1 - dist * invRadius;
+        var radial = t * strength;
+        targetX += nx * radial;
+        targetY += ny * radial;
+        var edge = dist * invRadius;
+        var ring = 4 * edge * (1 - edge);
+        var spin = spinStrength * ring;
+        targetX += -ny * spin;
+        targetY += nx * spin;
       }
 
       dot.x += (targetX - dot.x) * ease;
