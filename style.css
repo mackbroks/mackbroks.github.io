@@ -8,13 +8,13 @@ body {
   color: #fff;
 }
 
-/* Full-page background */
+/* Full-page background — solid black so canvas rainbow reads clearly */
 .page {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: radial-gradient(circle at top, #163d7a 0%, #0b1f3f 40%, #050b16 100%);
-  background-color: #050b16; /* fallback if gradient fails */
+  background: #000000;
+  background-color: #000000;
 }
 
 /* Canvas dot field background */

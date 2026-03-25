@@ -12,19 +12,32 @@
   var dots = [];
   var mouse = { x: -9999, y: -9999 };
 
-  var spacing = 9;
-  var radius = 70;
-  var strength = 7;
-  var ease = 0.10;
-  var baseDotSize = 0.6;
+  var spacing = 10;
+  var influenceRadius = 140;
+  var strength = 6;
+  var ease = 0.12;
+  var baseDotSize = 1.1;
+  var maxDotSize = 2.6;
+  /** Slow hue drift (rad/s) so the rainbow “moves” over time */
+  var hueDrift = 0.04;
 
   var dpr = 1;
   var cssW = 0;
   var cssH = 0;
   var rafId = 0;
+  var hueTime = 0;
+  var lastFrame = 0;
 
   function clamp(n, min, max) {
     return Math.max(min, Math.min(max, n));
+  }
+
+  /** Stable rainbow per grid cell (plus optional time drift in draw) */
+  function hueFromPosition(x, y, w, h) {
+    if (!w || !h) return 0;
+    var nx = x / w;
+    var ny = y / h;
+    return (nx * 320 + ny * 160) % 360;
   }
 
   function setCanvasSize() {
@@ -56,7 +69,8 @@
           baseY: y,
           x: x,
           y: y,
-          size: baseDotSize
+          size: baseDotSize,
+          hue: hueFromPosition(x, y, width, height)
         });
       }
     }
@@ -74,18 +88,42 @@
     mouse.y = -9999;
   }
 
+  function drawStaticReducedMotion() {
+    if (!ctx || !canvas) return;
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, cssW, cssH);
+    for (var i = 0; i < dots.length; i++) {
+      var dot = dots[i];
+      var h = dot.hue % 360;
+      ctx.fillStyle = 'hsl(' + h.toFixed(1) + ', 18%, 14%)';
+      ctx.beginPath();
+      ctx.arc(dot.baseX, dot.baseY, baseDotSize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
   function animateDotField() {
     if (!ctx || !canvas) return;
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      drawStaticReducedMotion();
+      return;
+    }
     if (document.hidden) {
       rafId = window.requestAnimationFrame(animateDotField);
       return;
     }
 
-    ctx.clearRect(0, 0, cssW, cssH);
+    var now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    var dt = lastFrame ? (now - lastFrame) * 0.001 : 0;
+    if (dt > 0.12) dt = 0.12;
+    lastFrame = now;
+    hueTime += dt * hueDrift * 360;
 
-    var radiusSq = radius * radius;
-    var invRadius = 1 / radius;
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    var radiusSq = influenceRadius * influenceRadius;
+    var invRadius = 1 / influenceRadius;
 
     for (var i = 0; i < dots.length; i++) {
       var dot = dots[i];
@@ -111,19 +149,21 @@
       dot.x += (targetX - dot.x) * ease;
       dot.y += (targetY - dot.y) * ease;
 
-      // Reduce per-dot string churn by using a few alpha buckets.
-      var alpha;
-      if (!inside) {
-        alpha = 0.30;
-      } else {
-        var t = 1 - dist * invRadius; // 0..1
-        var bucket = Math.max(0, Math.min(5, (t * 6) | 0)); // 0..5
-        alpha = 0.30 + bucket * 0.11; // 0.30..0.85
+      var engagement = 0;
+      if (inside) {
+        engagement = 1 - dist * invRadius;
+        engagement = engagement * engagement;
       }
-      ctx.fillStyle = 'rgba(210, 230, 255, ' + alpha + ')';
 
+      var h = (dot.hue + hueTime) % 360;
+      if (h < 0) h += 360;
+      var sat = 12 + engagement * 82;
+      var light = 10 + engagement * 58;
+      ctx.fillStyle = 'hsl(' + h.toFixed(1) + ', ' + sat.toFixed(1) + '%, ' + light.toFixed(1) + '%)';
+
+      var rDot = baseDotSize + (maxDotSize - baseDotSize) * engagement;
       ctx.beginPath();
-      ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+      ctx.arc(dot.x, dot.y, rDot, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -149,6 +189,7 @@
       resizeTimer = window.setTimeout(function () {
         setCanvasSize();
         buildDots(cssW, cssH);
+        if (prefersReducedMotion) drawStaticReducedMotion();
       }, 80);
     });
 
