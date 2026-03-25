@@ -12,12 +12,11 @@
   var dots = [];
   var mouse = { x: -9999, y: -9999 };
 
-  var spacing = 5;
-  // Larger influence region (note: higher radius means more dots affected)
+  var spacing = 9;
   var radius = 70;
   var strength = 7;
   var ease = 0.10;
-  var baseDotSize = 0.5;
+  var baseDotSize = 0.6;
 
   var dpr = 1;
   var cssW = 0;
