@@ -13,9 +13,12 @@
   var mouse = { x: -9999, y: -9999 };
 
   var spacing = 10;
-  var influenceRadius = 140;
-  var strength = 6;
-  var ease = 0.12;
+  /** Larger = bigger “ring” of dots and more open space near the cursor */
+  var influenceRadius = 200;
+  /** How far dots slide outward from the pointer (radial push); below Goering-level */
+  var strength = 11;
+  /** How quickly dots reach their pushed position (higher = snappier hole) */
+  var ease = 0.16;
   var baseDotSize = 1.1;
   var maxDotSize = 2.6;
   /** Slow hue drift (rad/s) so the rainbow “moves” over time */
