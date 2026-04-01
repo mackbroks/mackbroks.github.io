@@ -348,6 +348,77 @@
 
   initDotField();
 
+  /* ----- Page tabs (Projects / About me) — runs before projects block so nav always works ----- */
+  function initPageTabs() {
+    var tablist = document.querySelector('.page-nav-inner[role="tablist"]');
+    if (!tablist) return;
+
+    var tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+    var panels = tabs.map(function (t) {
+      var id = t.getAttribute('aria-controls');
+      return id ? document.getElementById(id) : null;
+    });
+
+    function setHashForIndex(index) {
+      if (typeof history === 'undefined' || !history.replaceState) return;
+      var base = location.pathname + location.search;
+      if (index === 1) {
+        history.replaceState(null, '', base + '#about');
+      } else {
+        history.replaceState(null, '', base);
+      }
+    }
+
+    function select(index) {
+      var i = clamp(index, 0, tabs.length - 1);
+      tabs.forEach(function (tab, j) {
+        var selected = j === i;
+        tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+        tab.tabIndex = selected ? 0 : -1;
+        if (panels[j]) {
+          panels[j].hidden = !selected;
+        }
+      });
+      setHashForIndex(i);
+    }
+
+    function indexFromHash() {
+      if (location.hash === '#about') return 1;
+      return 0;
+    }
+
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () {
+        select(i);
+      });
+      tab.addEventListener('keydown', function (e) {
+        var next = i;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          next = (i + 1) % tabs.length;
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          next = (i - 1 + tabs.length) % tabs.length;
+        } else if (e.key === 'Home') {
+          next = 0;
+        } else if (e.key === 'End') {
+          next = tabs.length - 1;
+        } else {
+          return;
+        }
+        e.preventDefault();
+        select(next);
+        tabs[next].focus();
+      });
+    });
+
+    window.addEventListener('hashchange', function () {
+      select(indexFromHash());
+    });
+
+    select(indexFromHash());
+  }
+
+  initPageTabs();
+
   var container = document.getElementById('projects');
   if (!container) return;
 

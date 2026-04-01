@@ -20,7 +20,15 @@
       </div>
     </header>
 
+    <nav class="page-nav" aria-label="Primary">
+      <div class="page-nav-inner" role="tablist" aria-label="Page sections">
+        <button type="button" class="page-nav-tab" role="tab" id="tab-projects" aria-selected="true" aria-controls="panel-projects">Projects</button>
+        <button type="button" class="page-nav-tab" role="tab" id="tab-about" aria-selected="false" aria-controls="panel-about" tabindex="-1">About me</button>
+      </div>
+    </nav>
+
     <main class="content-section">
+      <div id="panel-projects" class="tab-panel" role="tabpanel" aria-labelledby="tab-projects">
       <div class="projects" id="projects">
 
         <!-- ========== PROJECT BLOCK 1 ========== -->
@@ -116,6 +124,20 @@
             </p>
         </article>
 
+      </div>
+      </div>
+
+      <div id="panel-about" class="tab-panel" role="tabpanel" aria-labelledby="tab-about" hidden>
+        <article class="about-panel glass-panel">
+          <h2 class="about-title">About me</h2>
+          <div class="about-body">
+            <p>My family is from Chicago and Louisiana; I grew up in the south suburbs of Illinois. I enjoy keeping a sense of peace in my day-to-day life, exercising, and spending time with family and friends.</p>
+            <p>I like trying new foods (within reason), listening to music, going to see films, cycling, reading, soccer, the beach as much as possible, coding and building projects, playing video games, art and museums, and watching sports. My favorite shows of all time are <em>The Wire</em>, <em>Breaking Bad</em>, <em>The Walking Dead</em>, and <em>The Office</em>. I have two dogs at home that I love.</p>
+            <p>I have really big aspirations to hike, snowboard, surf, get more into cycling, and go back abroad as soon as it becomes affordable.</p>
+            <p>I've ve traveled to Mexico, Greece, Belgium, France, Spain, Italy, the Netherlands, and Slovenia, and will be going back to Italy and Africa this summer, and hopefully soon after that to Japan and China.</p>
+            <p>What truly motivates me—my "why"—is honoring the hard work and sacrifices of my parents and elders. I'm always finding new reasons to be grateful. While I don't have a strict long-term plan, I aim to create something meaningful and build a life that brings me joy.</p>
+          </div>
+        </article>
       </div>
     </main>
 

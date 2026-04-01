@@ -30,6 +30,7 @@ body {
 /* Ensure content renders above background canvas */
 .top-links,
 .summary-section,
+.page-nav,
 .content-section,
 .footer-section {
   position: relative;
@@ -98,6 +99,93 @@ body {
   font-size: clamp(0.95rem, 2vw, 1.1rem);
   color: rgba(255, 255, 255, 0.95);
   line-height: 1.5;
+}
+
+/* ----- Page tabs (Projects / About me) ----- */
+.page-nav {
+  padding: 0 clamp(1rem, 4vw, 2rem) clamp(0.5rem, 2vw, 1rem);
+  display: flex;
+  justify-content: center;
+}
+
+.page-nav-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 0.35rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.page-nav-tab {
+  font: inherit;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 1.1rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.page-nav-tab:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.page-nav-tab[aria-selected="true"] {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.page-nav-tab:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.65);
+  outline-offset: 2px;
+}
+
+.tab-panel {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.tab-panel[hidden] {
+  display: none !important;
+}
+
+.about-panel {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-title {
+  margin: 0 0 0.65em;
+  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.15;
+}
+
+.about-body p {
+  margin: 0 0 1em;
+  font-size: clamp(0.92rem, 1.85vw, 1.05rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.about-body p:last-child {
+  margin-bottom: 0;
+}
+
+.about-body em {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.98);
 }
 
 /* ----- 60% Middle: Projects / demos ----- */
