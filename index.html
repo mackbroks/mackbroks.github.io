@@ -53,26 +53,32 @@
             </div>
           </div>
 
-          <div class="project-problem glass-panel">
-            <h3 class="project-section-heading">Problem</h3>
-            <p>At the beginning of each semester, students manually create hundreds of organization objectives to stay on top of coursework throughout the semester. This process is time-consuming and painful, but absolutely necessary to succeed as a student. Aside from the core issue, the process also lacks the true optimization features modern college studnts deserve.</p>
+          <div class="project-details-stack">
+            <div class="project-problem glass-panel">
+              <h3 class="project-section-heading">Problem</h3>
+              <p>At the beginning of each semester, students manually create hundreds of organization objectives to stay on top of coursework throughout the semester. This process is time-consuming and painful, but absolutely necessary to succeed as a student. Aside from the core issue, the process also lacks the true optimization features modern college studnts deserve.</p>
+            </div>
+
+            <div class="project-deliverable glass-panel">
+              <h3 class="project-section-heading">Deliverable</h3>
+              <p class="deliverable-one-liner">A browser-based flow from pasted or uploaded syllabi to downloadable ICS files with configurable reminders and report-style summaries.</p>
+              <h4 class="project-subheading">Core components</h4>
+              <ul class="deliverable-list">
+                <li><strong>User inputs:</strong> Syllabus text upload, class schedule pattern (e.g. MWF), API key, reminder windows, report preferences.</li>
+                <li><strong>System processes:</strong> LLM-backed parse and normalization; multi-format date handling; event classification (homework, exam, project, etc.); ICS generation.</li>
+                <li><strong>Outputs:</strong> One ICS file with thousands of organized event objects per class, ready for Google Calendar, Apple Calendar, and Outlook. Email reports with upcoming objectives and dates.</li>
+              </ul>
+            </div>
           </div>
 
-          <div class="project-deliverable glass-panel">
-            <h3 class="project-section-heading">Deliverable</h3>
-            <p class="deliverable-one-liner">A browser-based flow from pasted or uploaded syllabi to downloadable ICS files with configurable reminders and report-style summaries.</p>
-            <h4 class="project-subheading">Core components</h4>
-            <ul class="deliverable-list">
-              <li><strong>User inputs:</strong> Syllabus text upload, class schedule pattern (e.g. MWF), API key, reminder windows, report preferences.</li>
-              <li><strong>System processes:</strong> LLM-backed parse and normalization; multi-format date handling; event classification (homework, exam, project, etc.); ICS generation.</li>
-              <li><strong>Outputs:</strong> One ICS file with thousands of organized event objects per class, ready for Google Calendar, Apple Calendar, and Outlook. Email reports with upcoming objectives and dates.</li>
-            </ul>
-            <h4 class="project-subheading">What I learned</h4>
+          <div class="project-learned-panel glass-panel">
+            <h3 class="project-section-heading">What I learned</h3>
             <p class="project-learned">
             This project forced me to be clear in how I separated parsing, calendar logic, and file export without relying on a database. It also showed me how important UX is when people bring in messy, real-world inputs like syllabi. I added a clarification step between the user and the LLM to make the output more reliable.
-            
+
             This started as something I built for myself—I didn’t want to manually organize everything, so I automated it. When I used it for a class presentation, I took it further and focused more on the frontend and overall experience. After seeing other projects, I added a Windows XP-style design to give it more personality and avoid the same look that comes with rapid prototyping.
             </p>
+          </div>
         </article>
 
         <!-- ========== PROJECT BLOCK 2 ========== -->
@@ -99,26 +105,32 @@
             </div>
           </div>
 
-          <div class="project-problem glass-panel">
-            <h3 class="project-section-heading">Problem</h3>
-            <p>Readers needed a path from capture to ebook, offline reading on multiple devices, and synchronized access across devices—without forcing everyone into a single third-party ecosystem or requiring an account for local use.</p>
+          <div class="project-details-stack">
+            <div class="project-problem glass-panel">
+              <h3 class="project-section-heading">Problem</h3>
+              <p>Readers needed a path from capture to ebook, offline reading on multiple devices, and synchronized access across devices—without forcing everyone into a single third-party ecosystem or requiring an account for local use.</p>
+            </div>
+
+            <div class="project-deliverable glass-panel">
+              <h3 class="project-section-heading">Deliverable</h3>
+              <p class="deliverable-one-liner">An end-to-end pipeline from desktop capture to encrypted ebooks, a PWA library for offline reading, and an optional FastAPI/PostgreSQL backend for sync.</p>
+              <h4 class="project-subheading">Core components</h4>
+              <ul class="deliverable-list">
+                <li><strong>User inputs:</strong> Source material and capture tool usage.</li>
+                <li><strong>System processes:</strong> Automated ebook generation. Encrypted formatting and storage. Reader parsing and rendering.</li>
+                <li><strong>Outputs:</strong> Portable ebooks; offline-first reading; cross-device library.</li>
+              </ul>
+            </div>
           </div>
 
-          <div class="project-deliverable glass-panel">
-            <h3 class="project-section-heading">Deliverable</h3>
-            <p class="deliverable-one-liner">An end-to-end pipeline from desktop capture to encrypted ebooks, a PWA library for offline reading, and an optional FastAPI/PostgreSQL backend for sync.</p>
-            <h4 class="project-subheading">Core components</h4>
-            <ul class="deliverable-list">
-              <li><strong>User inputs:</strong> Source material and capture tool usage.</li>
-              <li><strong>System processes:</strong> Automated ebook generation. Encrypted formatting and storage. Reader parsing and rendering.</li>
-              <li><strong>Outputs:</strong> Portable ebooks; offline-first reading; cross-device library.</li>
-            </ul>
-            <h4 class="project-subheading">What I learned</h4>
+          <div class="project-learned-panel glass-panel">
+            <h3 class="project-section-heading">What I learned</h3>
             <p class="project-learned">
             This started with a simple idea—to read anything I want, wherever and whenever I want. Through building it, I learned a lot across the stack: custom file formats, encryption and key handling, progressive web apps, and interaction automation, to name a few. I designed two different navigation systems (scroll and click) and worked through layering and event handling to simulate input reliably.
-            
+
             I also experimented with setting up a PostgreSQL server for syncing across devices. Getting it to run on my iPad and being able to lay back and read something I captured was pretty cool.
             </p>
+          </div>
         </article>
 
       </div>

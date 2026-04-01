@@ -1,20 +1,24 @@
 /* Reset and base */
 *, *::before, *::after { box-sizing: border-box; }
+:root {
+  /* Dark mode surface — near-black gray, not pure #000 */
+  --page-bg: #121212;
+}
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
   min-height: 100vh;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   color: #fff;
-  background-color: #01A0E6;
+  background-color: var(--page-bg);
 }
 
 /* Full-page background */
 .page {
   min-height: 100vh;
   position: relative;
-  background: #01A0E6;
-  background-color: #01A0E6;
+  background: var(--page-bg);
+  background-color: var(--page-bg);
   /* Space for fixed top contact bar */
   padding-top: var(--top-links-bar-height, 3.25rem);
 }
@@ -38,7 +42,7 @@ body {
   align-items: center;
   gap: 0.75rem;
   padding: clamp(0.85rem, 2.5vw, 1.15rem) clamp(1rem, 3vw, 1.5rem);
-  background: #01A0E6;
+  background: var(--page-bg);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   font-size: clamp(0.9rem, 2vw, 1rem);
   box-sizing: border-box;
@@ -188,15 +192,15 @@ body {
   gap: clamp(2rem, 5vw, 3rem);
 }
 
-/* Desktop / tablet: 2×2 grid — intro | media / problem | deliverable */
+/* Desktop / tablet: intro | media / problem+deliverable stack | what I learned */
 .project-block {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-rows: auto auto;
   grid-template-areas:
     "intro media"
-    "problem deliverable";
-  gap: clamp(1rem, 2.5vw, 1.35rem);
+    "stack learned";
+  gap: clamp(0.75rem, 2vw, 1.1rem);
   align-items: stretch;
   padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
 }
@@ -207,8 +211,45 @@ body {
 
 .project-intro { grid-area: intro; }
 .project-media { grid-area: media; }
-.project-problem { grid-area: problem; }
-.project-deliverable { grid-area: deliverable; }
+
+/* Left column: Problem above Deliverable — tight gap, no dead band between */
+.project-details-stack {
+  grid-area: stack;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.55rem, 1.25vw, 0.75rem);
+  min-height: 0;
+  align-self: stretch;
+}
+
+.project-details-stack .project-deliverable {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* Right column: full-height “What I learned” */
+.project-learned-panel {
+  grid-area: learned;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.project-learned-panel .project-section-heading {
+  flex-shrink: 0;
+}
+
+.project-learned-panel .project-learned {
+  flex: 1 1 auto;
+  margin: 0;
+  min-height: 0;
+}
+
+/* Slightly denser padding on the bottom row so panels feel filled, not padded */
+.project-details-stack .glass-panel,
+.project-learned-panel.glass-panel {
+  padding: clamp(0.85rem, 2.2vw, 1.35rem);
+}
 
 .glass-panel {
   min-width: 0;
@@ -253,11 +294,16 @@ body {
 }
 
 .project-problem p,
-.project-deliverable p {
-  margin: 0;
+.project-deliverable p,
+.project-learned-panel .project-learned {
   font-size: clamp(0.88rem, 1.7vw, 0.98rem);
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.94);
+}
+
+.project-problem p,
+.project-deliverable p {
+  margin: 0;
 }
 
 .deliverable-one-liner {
@@ -277,15 +323,11 @@ body {
   color: rgba(255, 255, 255, 0.93);
 }
 
-.project-learned {
-  margin-top: 0.25em;
-}
-
 /* ----- Carousel (top-right quadrant) ----- */
 .project-media {
   display: flex;
   flex-direction: column;
-  min-height: 220px;
+  min-height: 200px;
 }
 
 .carousel {
@@ -301,7 +343,7 @@ body {
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.25);
   flex: 1;
-  min-height: 200px;
+  min-height: 180px;
 }
 
 .carousel-track {
@@ -321,7 +363,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
+  min-height: 180px;
 }
 
 .carousel-embed {
@@ -402,18 +444,26 @@ body {
   text-align: center;
 }
 
-/* Mobile: single column — title, desc, media, problem, deliverable */
+/* Mobile: single column — title, desc, media, problem+deliverable, learned */
 @media (max-width: 768px) {
   .project-block {
     display: flex;
     flex-direction: column;
-    gap: clamp(1rem, 3vw, 1.35rem);
+    gap: clamp(0.85rem, 2.5vw, 1.15rem);
   }
 
   .project-intro { order: 1; }
   .project-media { order: 2; }
-  .project-problem { order: 3; }
-  .project-deliverable { order: 4; }
+  .project-details-stack {
+    order: 3;
+    gap: clamp(0.55rem, 2vw, 0.75rem);
+  }
+  .project-details-stack .project-deliverable {
+    flex: none;
+  }
+  .project-learned-panel {
+    order: 4;
+  }
 }
 
 /* ----- 20% Bottom: Footer ----- */
