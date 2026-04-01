@@ -6,47 +6,43 @@ body {
   min-height: 100vh;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   color: #fff;
+  background-color: #01A0E6;
 }
 
-/* Full-page background — solid black so canvas rainbow reads clearly */
+/* Full-page background */
 .page {
   min-height: 100vh;
   position: relative;
-  overflow: hidden;
-  background: #000000;
-  background-color: #000000;
+  background: #01A0E6;
+  background-color: #01A0E6;
+  /* Space for fixed top contact bar */
+  padding-top: var(--top-links-bar-height, 3.25rem);
 }
 
-/* Canvas dot field background */
-.dot-field {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Ensure content renders above background canvas */
-.top-links,
 .summary-section,
 .page-nav,
 .content-section,
 .footer-section {
   position: relative;
-  z-index: 1;
 }
 
-/* Top right: Email & LinkedIn links */
+/* Fixed top bar: Email & LinkedIn — stays at top while scrolling */
 .top-links {
   position: fixed;
-  top: clamp(1rem, 3vw, 1.5rem);
-  right: clamp(1rem, 3vw, 1.5rem);
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 10;
   display: flex;
+  justify-content: flex-end;
+  align-items: center;
   gap: 0.75rem;
+  padding: clamp(0.85rem, 2.5vw, 1.15rem) clamp(1rem, 3vw, 1.5rem);
+  background: #01A0E6;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   font-size: clamp(0.9rem, 2vw, 1rem);
+  box-sizing: border-box;
+  min-height: var(--top-links-bar-height, 3.25rem);
 }
 
 .top-links a {
@@ -105,20 +101,10 @@ body {
 .page-nav {
   padding: 0 clamp(1rem, 4vw, 2rem) clamp(0.5rem, 2vw, 1rem);
   display: flex;
-  justify-content: center;
-}
-
-.page-nav-inner {
-  display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: center;
-  padding: 0.35rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  align-items: center;
 }
 
 .page-nav-tab {
@@ -213,11 +199,9 @@ body {
   gap: clamp(1rem, 2.5vw, 1.35rem);
   align-items: stretch;
   padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .project-block:last-child {
-  border-bottom: none;
   padding-bottom: 0;
 }
 
