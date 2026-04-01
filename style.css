@@ -1,8 +1,8 @@
 /* Reset and base */
 *, *::before, *::after { box-sizing: border-box; }
 :root {
-  /* Dark mode surface — near-black gray, not pure #000 */
-  --page-bg: #121212;
+  /* Warm, soft charcoal — brown undertone, lifted from pure black */
+  --page-bg: #2a2624;
 }
 html { scroll-behavior: smooth; }
 body {
@@ -88,10 +88,12 @@ body {
 }
 
 .summary-box h1 {
-  margin: 0 0 0.5em;
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  margin: 0 0 0.45em;
+  font-size: clamp(2.35rem, 1.4rem + 4.25vw, 3.5rem);
   font-weight: 600;
   color: #fff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .summary-box p {
@@ -111,33 +113,42 @@ body {
   align-items: center;
 }
 
+/* Same translucent “glass” treatment as .glass-panel project blocks */
 .page-nav-tab {
   font: inherit;
   font-size: clamp(0.9rem, 1.8vw, 1rem);
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.88);
-  background: transparent;
-  border: none;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 999px;
-  padding: 0.45rem 1.1rem;
+  padding: 0.5rem 1.2rem;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
 .page-nav-tab:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.32);
 }
 
 .page-nav-tab[aria-selected="true"] {
   color: #fff;
-  background: rgba(255, 255, 255, 0.22);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .page-nav-tab:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.65);
+  outline: 2px solid rgba(255, 255, 255, 0.55);
   outline-offset: 2px;
+}
+
+.page-nav-tab[aria-selected="true"]:focus-visible {
+  outline-color: rgba(255, 255, 255, 0.65);
 }
 
 .tab-panel {
