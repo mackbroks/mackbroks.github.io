@@ -365,32 +365,115 @@
   var yearEl = document.getElementById('footer-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  /* ----- Media modal (root): image or video fullscreen ----- */
+  var modal = document.getElementById('media-modal');
+  var modalImg = modal && modal.querySelector('.media-modal-img');
+  var modalVideo = modal && modal.querySelector('.media-modal-video');
+  var modalBackdrop = modal && modal.querySelector('.media-modal-backdrop');
+  var modalClose = modal && modal.querySelector('.media-modal-close');
 
-  var modal = document.getElementById('image-modal');
-  var modalImg = modal && modal.querySelector('.image-modal-img');
-  var modalBackdrop = modal && modal.querySelector('.image-modal-backdrop');
-  var modalClose = modal && modal.querySelector('.image-modal-close');
-
-  function openModal(src, alt) {
-    if (!modal || !modalImg) return;
+  function showModalImage(src, alt) {
+    if (!modal || !modalImg || !modalVideo) return;
+    modalVideo.pause();
+    modalVideo.removeAttribute('src');
+    modalVideo.hidden = true;
+    modalImg.hidden = false;
     modalImg.src = src;
     modalImg.alt = alt || '';
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
   }
 
-  function closeModal() {
-    if (!modal) return;
+  function showModalVideo(src) {
+    if (!modal || !modalImg || !modalVideo) return;
+    modalImg.removeAttribute('src');
+    modalImg.alt = '';
+    modalImg.hidden = true;
+    modalVideo.hidden = false;
+    modalVideo.src = src;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    var p = modalVideo.play();
+    if (p && typeof p.catch === 'function') p.catch(function () {});
+  }
+
+  function closeMediaModal() {
+    if (!modal || !modalVideo) return;
+    modalVideo.pause();
+    modalVideo.removeAttribute('src');
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
   }
 
-  if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
-  if (modalClose) modalClose.addEventListener('click', closeModal);
+  if (modalBackdrop) modalBackdrop.addEventListener('click', closeMediaModal);
+  if (modalClose) modalClose.addEventListener('click', closeMediaModal);
 
-  document.querySelectorAll('.media-box img').forEach(function (img) {
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal && modal.classList.contains('is-open')) {
+      closeMediaModal();
+    }
+  });
+
+  document.querySelectorAll('.carousel-embed--zoom').forEach(function (img) {
     img.addEventListener('click', function () {
-      openModal(this.src, this.alt);
+      showModalImage(this.src, this.alt);
     });
   });
+
+  document.querySelectorAll('.carousel-fullscreen').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var slide = btn.closest('.carousel-slide');
+      var v = slide && slide.querySelector('video.carousel-embed');
+      if (v && v.src) showModalVideo(v.src);
+    });
+  });
+
+  /* ----- Carousels ----- */
+  function initCarousel(root) {
+    var viewport = root.querySelector('.carousel-viewport');
+    var track = root.querySelector('.carousel-track');
+    var slides = track ? track.querySelectorAll('.carousel-slide') : [];
+    var prev = root.querySelector('.carousel-prev');
+    var next = root.querySelector('.carousel-next');
+    var currEl = root.querySelector('.carousel-curr');
+    var totalEl = root.querySelector('.carousel-total');
+    var n = slides.length;
+    var index = 0;
+
+    if (!track || !viewport || n === 0) return;
+
+    root.style.setProperty('--carousel-slides', String(n));
+    root.setAttribute('data-slide-count', String(n));
+    if (totalEl) totalEl.textContent = String(n);
+    if (n <= 1) {
+      if (prev) prev.disabled = true;
+      if (next) next.disabled = true;
+      return;
+    }
+
+    function apply() {
+      var pct = -(index / n) * 100;
+      track.style.transform = 'translateX(' + pct + '%)';
+      if (currEl) currEl.textContent = String(index + 1);
+      if (prev) prev.disabled = index <= 0;
+      if (next) next.disabled = index >= n - 1;
+    }
+
+    if (prev) {
+      prev.addEventListener('click', function () {
+        index = Math.max(0, index - 1);
+        apply();
+      });
+    }
+    if (next) {
+      next.addEventListener('click', function () {
+        index = Math.min(n - 1, index + 1);
+        apply();
+      });
+    }
+
+    apply();
+  }
+
+  document.querySelectorAll('[data-carousel]').forEach(initCarousel);
 })();

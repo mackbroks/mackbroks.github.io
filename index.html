@@ -16,7 +16,7 @@
     <header class="summary-section">
       <div class="summary-box">
         <h1>Chase James</h1>
-        <p>Hello! Thank you for taking some time to visit my portfolio website, I'm excited to share previews of my work. I hope you enjoy viewing!</p>
+        <p>Thank you for taking some time to visit my portfolio website. I'm excited to share previews of my work. I hope you enjoy viewing!</p>
       </div>
     </header>
 
@@ -25,58 +25,100 @@
 
         <!-- ========== PROJECT BLOCK 1 ========== -->
         <article class="project-block" data-date="2026-02-18">
-          <div class="media-box">
-            <video src="videos/s2cshortdemo.mp4" controls playsinline></video>
+          <div class="project-intro glass-panel">
+            <h2 class="project-title">Syllabus2Calendar</h2>
+            <p class="project-desc">Web application that turns college course syllabi into organized calendar files using LLM APIs, with built-in, configurable reminders and automated email reports; importable into Google Calendar, Apple Calendar, and Outlook.</p>
           </div>
-          <div class="text-box">
-            <h2 class="text-box-title">Syllabus2Calendar</h2>
-            <p>Web app that turns multiple academic course syllabi into organized calendar files using an LLM APIs, with reminders and reports; importable into Google Calendar, Apple Calendar, and Outlook</p>
-            <h3 class="text-box-subtitle">Tech stack</h3>
-            <ul class="text-box-list">
-              <li><strong>Web:</strong> Vanilla JavaScript, HTML, CSS: semester/class setup, syllabus paste/upload, API key and reminder/report settings</li>
-              <li><strong>Proxy:</strong> Node.js: proxy to Flask API, static frontend hosting, ICS file download</li>
-              <li><strong>Backend:</strong> Python, Flask REST API, OpenAI, icalendar: no database; per-request state; bulk ICS files written and returned</li>
+
+          <div class="project-media glass-panel">
+            <div class="carousel" data-carousel data-slide-count="1" aria-roledescription="carousel">
+              <div class="carousel-viewport">
+                <ul class="carousel-track" role="list">
+                  <li class="carousel-slide" role="listitem">
+                    <video class="carousel-embed" src="videos/s2cshortdemo.mp4" controls playsinline preload="metadata"></video>
+                    <button type="button" class="carousel-fullscreen" aria-label="Open video fullscreen">⛶</button>
+                  </li>
+                </ul>
+              </div>
+              <div class="carousel-nav">
+                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous slide" disabled>‹</button>
+                <span class="carousel-counter"><span class="carousel-curr">1</span> / <span class="carousel-total">1</span></span>
+                <button type="button" class="carousel-btn carousel-next" aria-label="Next slide" disabled>›</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-problem glass-panel">
+            <h3 class="project-section-heading">Problem</h3>
+            <p>At the beginning of each semester, students manually create hundreds of organization objectives to stay on top of coursework throughout the semester. This process is time-consuming and painful, but absolutely necessary to succeed as a student. Aside from the core issue, the process also lacks the true optimization features modern college studnts deserve.</p>
+          </div>
+
+          <div class="project-deliverable glass-panel">
+            <h3 class="project-section-heading">Deliverable</h3>
+            <p class="deliverable-one-liner">A browser-based flow from pasted or uploaded syllabi to downloadable ICS files with configurable reminders and report-style summaries.</p>
+            <h4 class="project-subheading">Core components</h4>
+            <ul class="deliverable-list">
+              <li><strong>User inputs:</strong> Syllabus text upload, class schedule pattern (e.g. MWF), API key, reminder windows, report preferences.</li>
+              <li><strong>System processes:</strong> LLM-backed parse and normalization; multi-format date handling; event classification (homework, exam, project, etc.); ICS generation.</li>
+              <li><strong>Outputs:</strong> One ICS file with thousands of organized event objects per class, ready for Google Calendar, Apple Calendar, and Outlook. Email reports with upcoming objectives and dates.</li>
             </ul>
-            <h3 class="text-box-subtitle">Situation</h3>
-            <p>Students manually create hundreds of calendar events from syllabi to track assignments and due dates, often making errors, missing deadlines, and lack structured reminder systems</p>
-            <h3 class="text-box-subtitle">Task</h3>
-            <p>Turn pasted syllabi into a single ICS calendar with configurable reminders, timeline countdowns, and pre-generated report content;without manual event entry</p>
-            <h3 class="text-box-subtitle">Action</h3>
-            <p>Built a web app with syllabus paste/upload and an LLM-based two-step parse. Implemented multi-format date handling and class-schedule integration (e.g. MWF, TTh), event classification (HW, EXA, PRO), configurable reminder windows and report days, and one consolidated ICS from multiple syllabi. No database or authentication required</p>
-            <h3 class="text-box-subtitle">Result</h3>
-            <p>End-to-end flow from syllabus to ICS; standard ICS works in Google Calendar, Apple Calendar, and Outlook; timeline countdowns (e.g. 12-day exam countdown), configurable reminders, and report content; single-session API key and config</p>
-          </div>
+            <h4 class="project-subheading">What I learned</h4>
+            <p class="project-learned">
+            This project forced me to be clear in how I separated parsing, calendar logic, and file export without relying on a database. It also showed me how important UX is when people bring in messy, real-world inputs like syllabi. I added a clarification step between the user and the LLM to make the output more reliable.
+            
+            This started as something I built for myself—I didn’t want to manually organize everything, so I automated it. When I used it for a class presentation, I took it further and focused more on the frontend and overall experience. After seeing other projects, I added a Windows XP-style design to give it more personality and avoid the same look that comes with rapid prototyping.
+            </p>
         </article>
 
         <!-- ========== PROJECT BLOCK 2 ========== -->
         <article class="project-block" data-date="2026-02-18">
-          <div class="media-box">
-            <img src="images/demo/reader image.png" alt="Reader view">
+          <div class="project-intro glass-panel">
+            <h2 class="project-title">Reader Suite</h2>
+            <p class="project-desc">Desktop application for capturing and generating digital books, plus a mobile-first library suite for offline reading and synchronized access across devices.</p>
           </div>
-          <div class="text-box">
-            <h2 class="text-box-title">Reader Suite</h2>
-            <p>Desktop app for capturing and generating ebooks, plus a library suite for reading offline, with optional backend sync across devices</p>
-            <h3 class="text-box-subtitle">Tech stack</h3>
-            <ul class="text-box-list">
-              <li><strong>Desktop:</strong> Python: GUI, automation, file generation, and custom encrypted file format</li>
-              <li><strong>Web:</strong>JavaScript: PWA with offline storage (IndexedDB), Service Worker, and file handling</li>
-              <li><strong>Backend:</strong> REST API (FastAPI), PostgreSQL, migrations, auth, and file storage</li>
+
+          <div class="project-media glass-panel">
+            <div class="carousel" data-carousel data-slide-count="1" aria-roledescription="carousel">
+              <div class="carousel-viewport">
+                <ul class="carousel-track" role="list">
+                  <li class="carousel-slide" role="listitem">
+                    <img class="carousel-embed carousel-embed--zoom" src="images/demo/reader image.png" alt="Reader view">
+                  </li>
+                </ul>
+              </div>
+              <div class="carousel-nav">
+                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous slide" disabled>‹</button>
+                <span class="carousel-counter"><span class="carousel-curr">1</span> / <span class="carousel-total">1</span></span>
+                <button type="button" class="carousel-btn carousel-next" aria-label="Next slide" disabled>›</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-problem glass-panel">
+            <h3 class="project-section-heading">Problem</h3>
+            <p>Readers needed a path from capture to ebook, offline reading on multiple devices, and optional sync—without forcing everyone into a single third-party ecosystem or requiring an account for local use.</p>
+          </div>
+
+          <div class="project-deliverable glass-panel">
+            <h3 class="project-section-heading">Deliverable</h3>
+            <p class="deliverable-one-liner">An end-to-end pipeline from desktop capture to encrypted ebooks, a PWA library for offline reading, and an optional FastAPI/PostgreSQL backend for sync.</p>
+            <h4 class="project-subheading">Core components</h4>
+            <ul class="deliverable-list">
+              <li><strong>User inputs:</strong> Source material and capture tool usage.</li>
+              <li><strong>System processes:</strong> Automated ebook generation. Encrypted formatting and storage. Reader parsing and rendering.</li>
+              <li><strong>Outputs:</strong> Portable ebooks; offline-first reading; cross-device library.</li>
             </ul>
-            <h3 class="text-box-subtitle">Situation</h3>
-            <p>Readers needed a way to capture content into ebooks, read offline on any device, and sync across devices without locking everything into a single third-party service</p>
-            <h3 class="text-box-subtitle">Task</h3>
-            <p>Deliver a full flow from capture to read, with offline-first reading and optional cloud sync; keeping local use possible without an account.</p>
-            <h3 class="text-box-subtitle">Action</h3>
-            <p>Built a Python desktop app for capture and generation of a custom encrypted ebook format with key derivation. Implemented a Progressive Web App (PWA) library and reader with IndexedDB and a Service Worker for offline reading. Added FastAPI backend with PostgreSQL, auth, and file storage for cross-device sync. Desktop runs on Windows, macOS, and Linux</p>
-            <h3 class="text-box-subtitle">Result</h3>
-            <p>Single pipeline from capture to read; offline-first for local use; custom file encryption for security and performance; portable desktop and standard REST/PostgreSQL backend for deployability.</p>
-          </div>
+            <h4 class="project-subheading">What I learned</h4>
+            <p class="project-learned">
+            This started with a simple idea—to read anything I want, wherever and whenever I want. Through building it, I learned a lot across the stack: custom file formats, encryption and key handling, progressive web apps, and interaction automation, to name a few. I designed two different navigation systems (scroll and click) and worked through layering and event handling to simulate input reliably.
+            
+            I also experimented with setting up a PostgreSQL server for syncing across devices. Getting it to run on my iPad and being able to lay back and read something I captured was pretty cool.
+            </p>
         </article>
 
       </div>
     </main>
 
-    <!-- Bottom 20%: Footer / spacer -->
     <footer class="footer-section">
       <div class="footer-box">
         <p id="footer-year"></p>
@@ -84,12 +126,13 @@
     </footer>
   </div>
 
-  <!-- Image modal: click overlay or close button to exit -->
-  <div id="image-modal" class="image-modal" aria-hidden="true">
-    <button type="button" class="image-modal-close" aria-label="Close">×</button>
-    <div class="image-modal-backdrop"></div>
-    <div class="image-modal-content">
-      <img src="" alt="" class="image-modal-img">
+  <!-- Media modal at document root: image or video fullscreen -->
+  <div id="media-modal" class="media-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Fullscreen media">
+    <button type="button" class="media-modal-close" aria-label="Close">×</button>
+    <div class="media-modal-backdrop"></div>
+    <div class="media-modal-content">
+      <img src="" alt="" class="media-modal-img" hidden>
+      <video class="media-modal-video" controls playsinline hidden></video>
     </div>
   </div>
 

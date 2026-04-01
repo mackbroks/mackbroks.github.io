@@ -107,120 +107,241 @@ body {
 }
 
 .projects {
-  max-width: 1000px;
+  max-width: 1180px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.25rem, 3vw, 2rem);
+  gap: clamp(2rem, 5vw, 3rem);
 }
 
-/* align-items: start so text fills downward and media/buttons don't stretch the other column */
+/* Desktop / tablet: 2×2 grid — intro | media / problem | deliverable */
 .project-block {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(1rem, 3vw, 1.5rem);
-  align-items: start;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "intro media"
+    "problem deliverable";
+  gap: clamp(1rem, 2.5vw, 1.35rem);
+  align-items: stretch;
+  padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-@media (max-width: 640px) {
-  .project-block {
-    grid-template-columns: 1fr;
-  }
+.project-block:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
-/* One project block = one grouped unit (media left, text right). min-width: 0 keeps grid from overflowing. */
-.media-box,
-.text-box {
+.project-intro { grid-area: intro; }
+.project-media { grid-area: media; }
+.project-problem { grid-area: problem; }
+.project-deliverable { grid-area: deliverable; }
+
+.glass-panel {
   min-width: 0;
-  min-height: 200px;
   padding: clamp(1rem, 2.5vw, 1.5rem);
   background: rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+}
+
+.project-title {
+  margin: 0 0 0.45em;
+  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.15;
+}
+
+.project-desc {
+  margin: 0;
+  font-size: clamp(0.92rem, 1.85vw, 1.05rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.project-section-heading {
+  margin: 0 0 0.5em;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 600;
+  color: #fff;
+}
+
+.project-subheading {
+  margin: 1em 0 0.4em;
+  font-size: clamp(0.88rem, 1.6vw, 0.98rem);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.project-problem p,
+.project-deliverable p {
+  margin: 0;
+  font-size: clamp(0.88rem, 1.7vw, 0.98rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.deliverable-one-liner {
+  margin-bottom: 0.25em;
+  font-size: clamp(0.9rem, 1.75vw, 1rem);
+}
+
+.deliverable-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.deliverable-list li {
+  margin-bottom: 0.45em;
+  font-size: clamp(0.85rem, 1.55vw, 0.95rem);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.93);
+}
+
+.project-learned {
+  margin-top: 0.25em;
+}
+
+/* ----- Carousel (top-right quadrant) ----- */
+.project-media {
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+}
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.carousel-viewport {
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  flex: 1;
+  min-height: 200px;
+}
+
+.carousel-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  width: calc(100% * var(--carousel-slides, 1));
+  transition: transform 0.35s ease;
+  height: 100%;
+}
+
+.carousel-slide {
+  flex: 0 0 calc(100% / var(--carousel-slides, 1));
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 200px;
+}
+
+.carousel-embed {
+  width: 100%;
+  max-height: min(360px, 50vh);
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.carousel-embed--zoom {
+  cursor: zoom-in;
+}
+
+.carousel-fullscreen {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
   color: #fff;
-}
-
-.text-box {
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  overflow-wrap: break-word;
-  overflow-x: hidden; /* keep text from spilling out of the box */
-}
-
-.media-box video {
-  width: 100%;
-  height: 100%;
-  min-height: 200px;
-  max-height: 360px;
-  object-fit: contain;
-}
-
-.media-box img {
-  width: 100%;
-  height: 100%;
-  min-height: 200px;
-  max-height: 360px;
-  object-fit: contain;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
 }
 
-.media-placeholder {
-  font-size: clamp(0.85rem, 2vw, 1rem);
-  color: rgba(255, 255, 255, 0.9);
+.carousel-fullscreen:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.carousel[data-slide-count="1"] .carousel-nav {
+  display: none;
+}
+
+.carousel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.carousel-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.carousel-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.carousel-counter {
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+  color: rgba(255, 255, 255, 0.85);
+  min-width: 3.5rem;
   text-align: center;
 }
 
-.text-box-title {
-  margin: 0 0 0.5em;
-  min-width: 0;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
-  font-weight: 600;
-  color: #fff;
-  line-height: 1.2;
-}
+/* Mobile: single column — title, desc, media, problem, deliverable */
+@media (max-width: 768px) {
+  .project-block {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 3vw, 1.35rem);
+  }
 
-.text-box p {
-  margin: 0;
-  min-width: 0; /* allow paragraph to shrink so it can wrap inside the flex/grid cell */
-  overflow-wrap: break-word;
-  word-break: break-word;
-  font-size: clamp(0.9rem, 1.8vw, 1rem);
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.95);
-}
-
-.text-box-subtitle {
-  margin: 1em 0 0.35em;
-  min-width: 0;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  font-size: clamp(0.95rem, 2vw, 1.1rem);
-  font-weight: 600;
-  color: #fff;
-  line-height: 1.3;
-}
-
-.text-box-list {
-  margin: 0;
-  padding-left: 1.25rem;
-  min-width: 0;
-}
-
-.text-box-list li {
-  margin-bottom: 0.4em;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  font-size: clamp(0.85rem, 1.6vw, 0.95rem);
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.95);
+  .project-intro { order: 1; }
+  .project-media { order: 2; }
+  .project-problem { order: 3; }
+  .project-deliverable { order: 4; }
 }
 
 /* ----- 20% Bottom: Footer ----- */
@@ -243,8 +364,8 @@ body {
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* ----- Image modal (fullscreen-style view, easy exit) ----- */
-.image-modal {
+/* ----- Media modal (root-level fullscreen image or video) ----- */
+.media-modal {
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -257,22 +378,22 @@ body {
   transition: visibility 0.2s, opacity 0.2s;
 }
 
-.image-modal.is-open {
+.media-modal.is-open {
   visibility: visible;
   opacity: 1;
 }
 
-.image-modal-backdrop {
+.media-modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.88);
   cursor: pointer;
 }
 
-.image-modal-content {
+.media-modal-content {
   position: relative;
   z-index: 1;
-  max-width: 90vw;
+  max-width: 92vw;
   max-height: 90vh;
   display: flex;
   align-items: center;
@@ -280,7 +401,8 @@ body {
   pointer-events: none;
 }
 
-.image-modal-content .image-modal-img {
+.media-modal-img,
+.media-modal-video {
   max-width: 100%;
   max-height: 90vh;
   width: auto;
@@ -290,7 +412,12 @@ body {
   border-radius: 8px;
 }
 
-.image-modal-close {
+.media-modal-video {
+  width: min(92vw, 1200px);
+  background: #000;
+}
+
+.media-modal-close {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -311,6 +438,6 @@ body {
   transition: background 0.15s;
 }
 
-.image-modal-close:hover {
+.media-modal-close:hover {
   background: rgba(255, 255, 255, 0.35);
 }
