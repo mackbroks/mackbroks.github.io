@@ -223,7 +223,7 @@ body {
 .project-intro { grid-area: intro; }
 .project-media { grid-area: media; }
 
-/* Left column: Problem above Deliverable — tight gap, no dead band between */
+/* Left column: Problem above Result — tight gap, no dead band between */
 .project-details-stack {
   grid-area: stack;
   display: flex;
